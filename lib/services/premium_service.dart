@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'dart:io' show Platform;
 import '../models/team.dart';
 import '../models/game.dart';
 import '../models/opponent.dart';
@@ -12,6 +13,8 @@ class PremiumService {
   static const int maxFreePlayers = 6;
 
   static Future<bool> isPremium() async {
+    // On iOS, always return true (fully unlocked)
+    if (Platform.isIOS) return true;
     try {
       final box = Hive.box('settings');
       final isPremium = box.get(_premiumKey);

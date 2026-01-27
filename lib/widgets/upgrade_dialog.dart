@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 import '../screens/purchase_screen.dart';
 
 /// Dialog to prompt users to upgrade to premium
@@ -16,6 +17,12 @@ class UpgradeToPremiumDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // On iOS, do not show the upgrade dialog at all
+    if (Platform.isIOS) {
+      // Immediately pop if shown by mistake
+      Future.microtask(() => Navigator.pop(context));
+      return const SizedBox.shrink();
+    }
     return AlertDialog(
       title: Row(
         children: [

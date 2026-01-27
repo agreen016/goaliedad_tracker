@@ -14,6 +14,22 @@ class PurchaseScreen extends StatefulWidget {
 }
 
 class _PurchaseScreenState extends State<PurchaseScreen> {
+  @override
+  Widget build(BuildContext context) {
+    // On iOS, never show the purchase screen
+    if (Platform.isIOS) {
+      Future.microtask(() => Navigator.pop(context));
+      return const SizedBox.shrink();
+    }
+    // ...existing code...
+    return _buildPurchaseScreen(context);
+  }
+
+  Widget _buildPurchaseScreen(BuildContext context) {
+    // ...existing code from the original build method...
+}
+
+class _PurchaseScreenState extends State<PurchaseScreen> {
   final InAppPurchase _iap = InAppPurchase.instance;
   late StreamSubscription<List<PurchaseDetails>> _subscription;
   
@@ -175,8 +191,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Upgrade to Premium'),
