@@ -3,7 +3,7 @@ name: goaliedad_tracker
 description: "Goalie Dad Stats Tracker — a modular, expandable app for tracking goalie performance and game stats."
 publish_to: 'none'
 
-version: 1.0.2+6
+version: 1.0.2+7
 
 environment:
   sdk: ^3.8.1
