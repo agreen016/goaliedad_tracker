@@ -214,6 +214,12 @@ class _LiveGameTrackerScreenState extends State<LiveGameTrackerScreen> {
         if (assist1Id != null) 'assist1Id': assist1Id,
         if (assist2Id != null) 'assist2Id': assist2Id,
         if (currentGoalieId.isNotEmpty) 'goalieId': currentGoalieId,
+        // Always include assistIds as a list for goals, for StatsAggregator
+        if (isGoal)
+          'assistIds': [
+            if (assist1Id != null && assist1Id.isNotEmpty) assist1Id,
+            if (assist2Id != null && assist2Id.isNotEmpty) assist2Id,
+          ],
       };
 
       final playerIdForEvent = isGoal ? goalScorerId ?? shooterId : shooterId;

@@ -332,22 +332,24 @@ class _GameDetailsScreenState extends State<GameDetailsScreen> {
           children: [
             ListTile(
               title: const Text('Available'),
-              onTap: () {
+              onTap: () async {
                 setState(() {
                   _game.availablePlayerIds.add(player.id);
                   _game.unavailablePlayerReasons.remove(player.id);
                 });
+                await _game.save();
                 Navigator.pop(context);
               },
             ),
             ...['Unavailable', 'Injury', 'Suspension', 'Other'].map((reason) {
               return ListTile(
                 title: Text(reason),
-                onTap: () {
+                onTap: () async {
                   setState(() {
                     _game.availablePlayerIds.remove(player.id);
                     _game.unavailablePlayerReasons[player.id] = reason;
                   });
+                  await _game.save();
                   Navigator.pop(context);
                 },
               );
