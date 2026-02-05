@@ -44,6 +44,7 @@ class GoalieDadStatsTrackerApp extends StatelessWidget {
     return MaterialApp(
       title: 'Goalie Dad Stats Tracker',
       theme: ThemeData.dark(),
+      debugShowCheckedModeBanner: false,
       home: SplashScreen(next: const TeamsScreen()),
     );
   }
