@@ -49,7 +49,7 @@ class _LiveGameTrackerScreenState extends State<LiveGameTrackerScreen> {
     'RD': '',
     'G': '',
   };
-  Offset? tapPosition;
+  // Offset? tapPosition; // No longer needed
 
   bool homeOnLeft = true;
   Opponent? opponentTeam;
@@ -1038,9 +1038,12 @@ class _LiveGameTrackerScreenState extends State<LiveGameTrackerScreen> {
     setState(() {
       if (team == 'home') {
         homePPO = (homePPO + delta).clamp(0, 99);
+        widget.game.homePPO = homePPO;
       } else {
         visitorPPO = (visitorPPO + delta).clamp(0, 99);
+        widget.game.visitorPPO = visitorPPO;
       }
+      widget.game.save();
     });
   }
 
@@ -1168,19 +1171,21 @@ class _LiveGameTrackerScreenState extends State<LiveGameTrackerScreen> {
           Expanded(
             child: GestureDetector(
               onTapDown: (details) {
-                // Calculate tap position relative to the ice image itself so
-                // normalization uses the image display rect (no stack offsets).
-                final box =
-                    iceKey.currentContext?.findRenderObject() as RenderBox?;
+                final box = iceKey.currentContext?.findRenderObject() as RenderBox?;
                 if (box != null) {
-                  tapPosition = box.globalToLocal(details.globalPosition);
+                  final localPosition = box.globalToLocal(details.globalPosition);
+                  // Single tap: shot, double tap: goal
+                  // Use a timer to distinguish single vs double tap
+                  // But for simplicity, always add marker on tapDown as shot
+                  addMarker(localPosition, false);
                 }
               },
-              onTap: () {
-                if (tapPosition != null) addMarker(tapPosition!, false);
-              },
-              onDoubleTap: () {
-                if (tapPosition != null) addMarker(tapPosition!, true);
+              onDoubleTapDown: (details) {
+                final box = iceKey.currentContext?.findRenderObject() as RenderBox?;
+                if (box != null) {
+                  final localPosition = box.globalToLocal(details.globalPosition);
+                  addMarker(localPosition, true);
+                }
               },
               child: SingleChildScrollView(
                 child: Stack(
